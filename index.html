@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <alink rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Sekuya&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="sidebar">  
@@ -31,22 +32,41 @@
         </ul>
     </div>
     <div class="header">
-        <div class="form">         
-            <h1>Library Project</h1>
-            <form>
-                <input type="text" placeholder="Search...">
-                <button type="submit"><span class="material-symbols-outlined">search</span></button>
-            </form>
+        <div class="search-bar">
+                <input type="text" id="book-search" placeholder="Search by title or author...">
+                <button type="submit">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+        </div>
+        <div class="header-tools">
+            <div class="user-profile">
+                <span class="material-symbols-outlined">notifications_active</span>
+                <img src="profile-pic.png" alt="Profile Picture">
+                <span>Zaphod Beeblebrox</span>
+            </div>
+        </div>
+   
+    </div>
+    <div class="add-book">
+        <div class="form-wrap">
+            <h1>Add New Book</h1>
+            <form class="book-form">
+                <input type="text" placeholder="Title" required>
+                <input type="text" placeholder="Author" required>
+                <input type="number" placeholder="Pages" required>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="read">
+                    <label for="read"><em>Check this box if you have read this book.</em></label>
+                </div>
+                <button type="submit">Add Book</button>
+            </form> 
         </div>
     </div>
     <div class="main">
         <div class="stats-overview">
-            <div class="stats-overview-title">Stats Overview</div>
-            <div class="stat-card">
-                <h3>Team 1 Total Users</h3>
-                <p>2,534</p>
-                <span class="material-symbols-outlined">add_chart avg_pace link</span>
-            </div>
+            <div class="stats-overview-title">Your Library</div>
+            <div id="card-container" style="display: contents;">
+                </div>
         </div>
     </div>
 </body>
