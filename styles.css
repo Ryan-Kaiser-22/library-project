@@ -267,13 +267,21 @@ h1 {
         0 0 60px 20px rgba(255, 255, 255, 0.4); /* Huge, faint outer light */
   transition: box-shadow 0.3s ease-in-out;
   margin-bottom: 20px;
+  min-height: 200px;
   max-width: 250px;
+  position: relative;
   border-right: 8px solid #ffffff;
   color: #ffffff
 }  
 
 .stat-card h3 {
-    text-shadow: 1px 1px 15px rgba(8, 130, 179, 0.3);
+  margin-top: 0;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.stat-card p:first-of-type {
+    margin-bottom: auto; 
 }
 
 .stat-card:hover {
@@ -283,6 +291,43 @@ h1 {
 
 .stat-card span {
   text-align: right;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24;
+  vertical-align: middle;
+}
+
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: #ffffff; 
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-btn:hover {
+    color: #2b0202;
+    transform: scale(1.1); 
+}
+
+
+.stat-card {
+    position: relative; 
+}
+
+.delete-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 
 .material-symbols-outlined {

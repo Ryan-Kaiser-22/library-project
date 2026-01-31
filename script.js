@@ -1,4 +1,8 @@
+
+let myLibrary = [];
 const bookForm = document.querySelector('.book-form');
+const cardContainer = document.getElementById('card-container');
+const searchBar = document.getElementById('book-search');
 
 const capitalize = (str) => {
     return str.toLowerCase().split(' ').map(word => 
@@ -6,52 +10,73 @@ const capitalize = (str) => {
     ).join(' ');
 };
 
+const saveLocalStorage = () => {
+    localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
+};
+
+const renderBooks = (dataToRender = myLibrary) => {
+    cardContainer.innerHTML = "";
+
+    dataToRender.forEach((book, index) => {
+        const newCard = document.createElement('div');
+        newCard.classList.add('stat-card');
+        
+        newCard.innerHTML = `
+            <h3>${book.title}</h3>
+            <p>By: ${book.author}</p>
+            <p>${book.pages} Pages</p>
+            <p><strong>${book.isRead ? 'Read' : 'Need to read!'}</strong></p>
+            <button class="delete-btn" onclick="removeBook(${index})" title="Delete Book">
+                <span class="material-symbols-outlined">close_small</span>
+            </button>
+        `;
+        cardContainer.appendChild(newCard);
+    });
+};
+
+const removeBook = (index) => {
+    const bookTitle = myLibrary[index].title;
+    const confirmed = confirm(`Are you sure you want to delete "${bookTitle}"?`);
+    if (confirmed) {
+        myLibrary.splice(index, 1); 
+        saveLocalStorage();         
+        renderBooks();           
+    } 
+};
+
 bookForm.addEventListener('submit', (e) => {
     e.preventDefault();
-
-    const cardContainer = document.getElementById('card-container');
-
-    const rawTitle = bookForm.querySelector('input[placeholder="Title"]').value;
-    const rawAuthor = bookForm.querySelector('input[placeholder="Author"]').value;
+    
+    const title = capitalize(bookForm.querySelector('input[placeholder="Title"]').value);
+    const author = capitalize(bookForm.querySelector('input[placeholder="Author"]').value);
     const pages = bookForm.querySelector('input[placeholder="Pages"]').value;
     const isRead = bookForm.querySelector('#read').checked;
 
-    const cleanTitle = capitalize(rawTitle);
-    const cleanAuthor = capitalize(rawAuthor);
-    const newCard = document.createElement('div');
-    newCard.classList.add('stat-card');
-    newCard.innerHTML = `
-        <h3>${cleanTitle}</h3>
-        <p>By: ${cleanAuthor}</p>
-        <p>${pages} Pages</p>
-        <p>${isRead ? 'Read' : 'Need to read!'}</p>
-        <span class="material-symbols-outlined">book</span>
-    `;
-    if (cardContainer) {
-        cardContainer.appendChild(newCard);
-    }
+    const newBook = { title, author, pages, isRead };
+
+    myLibrary.push(newBook);
+    saveLocalStorage();
+    renderBooks();
     bookForm.reset();
 });
 
-const searchBar = document.getElementById('book-search');
-
 searchBar.addEventListener('input', (e) => {
     const searchTerm = e.target.value.toLowerCase();
-    const cards = document.querySelectorAll('.stat-card');
+    
+    const filteredBooks = myLibrary.filter(book => 
+        book.title.toLowerCase().includes(searchTerm) || 
+        book.author.toLowerCase().includes(searchTerm)
+    );
 
-    cards.forEach(card => {
-        const title = card.querySelector('h3').textContent.toLowerCase();
-        const author = card.querySelector('p').textContent.toLowerCase();
-
-        if (title.includes(searchTerm) || author.includes(searchTerm)) {
-            card.style.display = "block";
-            card.classList.add('search-focus');
-            if (searchTerm === "") {
-                card.classList.remove('search-focus');
-            }
-        } else {
-            card.style.display = "none";
-            card.classList.remove('search-focus');
-        }
-    });
+    renderBooks(filteredBooks);
 });
+
+const init = () => {
+    const savedData = localStorage.getItem('myLibrary');
+    if (savedData) {
+        myLibrary = JSON.parse(savedData);
+        renderBooks();
+    }
+};
+
+init();
