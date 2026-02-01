@@ -1,8 +1,26 @@
-
 let myLibrary = [];
 const bookForm = document.querySelector('.book-form');
 const cardContainer = document.getElementById('card-container');
 const searchBar = document.getElementById('book-search');
+
+function Book(title, author, pages, isRead) {
+    this.id = crypto.randomUUID(); 
+    this.title = capitalize(title);
+    this.author = capitalize(author);
+    this.pages = pages;
+    this.isRead = isRead;
+}
+
+Book.prototype.toggleRead = function() {
+    this.isRead = !this.isRead;
+};
+
+function addBookToLibrary(title, author, pages, isRead) {
+    const newBook = new Book(title, author, pages, isRead);
+    myLibrary.push(newBook);
+    saveLocalStorage();
+    renderBooks();
+}
 
 const capitalize = (str) => {
     return str.toLowerCase().split(' ').map(word => 
@@ -17,7 +35,7 @@ const saveLocalStorage = () => {
 const renderBooks = (dataToRender = myLibrary) => {
     cardContainer.innerHTML = "";
 
-    dataToRender.forEach((book, index) => {
+    dataToRender.forEach((book) => {
         const newCard = document.createElement('div');
         newCard.classList.add('stat-card');
         
@@ -26,48 +44,55 @@ const renderBooks = (dataToRender = myLibrary) => {
             <p>By: ${book.author}</p>
             <p>${book.pages} Pages</p>
             <p><strong>${book.isRead ? 'Read' : 'Need to read!'}</strong></p>
-            <button class="delete-btn" onclick="removeBook(${index})" title="Delete Book">
-                <span class="material-symbols-outlined">close_small</span>
-            </button>
+            <div class="card-buttons">
+                <button class="toggle-btn" onclick="handleToggle('${book.id}')">
+                    ${book.isRead ? 'Mark Unread' : 'Mark Read'}
+                </button>
+                <button class="delete-btn" onclick="handleDelete('${book.id}')" title="Delete Book">
+                    <span class="material-symbols-outlined">close_small</span>
+                </button>
+            </div>
         `;
         cardContainer.appendChild(newCard);
     });
 };
 
-const removeBook = (index) => {
-    const bookTitle = myLibrary[index].title;
-    const confirmed = confirm(`Are you sure you want to delete "${bookTitle}"?`);
-    if (confirmed) {
-        myLibrary.splice(index, 1); 
-        saveLocalStorage();         
-        renderBooks();           
-    } 
+const handleToggle = (id) => {
+    const book = myLibrary.find(b => b.id === id);
+    if (book) {
+        book.isRead = !book.isRead;
+        saveLocalStorage();
+        renderBooks();
+    }
+};
+
+const handleDelete = (id) => {
+    const book = myLibrary.find(b => b.id === id);
+    if (confirm(`Delete "${book.title}"?`)) {
+        myLibrary = myLibrary.filter(b => b.id !== id);
+        saveLocalStorage();
+        renderBooks();
+    }
 };
 
 bookForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const title = capitalize(bookForm.querySelector('input[placeholder="Title"]').value);
-    const author = capitalize(bookForm.querySelector('input[placeholder="Author"]').value);
+    const title = bookForm.querySelector('input[placeholder="Title"]').value;
+    const author = bookForm.querySelector('input[placeholder="Author"]').value;
     const pages = bookForm.querySelector('input[placeholder="Pages"]').value;
     const isRead = bookForm.querySelector('#read').checked;
 
-    const newBook = { title, author, pages, isRead };
-
-    myLibrary.push(newBook);
-    saveLocalStorage();
-    renderBooks();
+    addBookToLibrary(title, author, pages, isRead);
     bookForm.reset();
 });
 
 searchBar.addEventListener('input', (e) => {
     const searchTerm = e.target.value.toLowerCase();
-    
     const filteredBooks = myLibrary.filter(book => 
         book.title.toLowerCase().includes(searchTerm) || 
         book.author.toLowerCase().includes(searchTerm)
     );
-
     renderBooks(filteredBooks);
 });
 
