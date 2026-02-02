@@ -43,7 +43,7 @@ const renderBooks = (dataToRender = myLibrary) => {
             <h3>${book.title}</h3>
             <p>By: ${book.author}</p>
             <p>${book.pages} Pages</p>
-            <p><strong>${book.isRead ? 'Read' : 'Need to read!'}</strong></p>
+            <p><strong>${book.isRead ? 'Have read' : 'Unread'}</strong></p>
             <div class="card-buttons">
                 <button class="toggle-btn" onclick="handleToggle('${book.id}')">
                     ${book.isRead ? 'Mark Unread' : 'Mark Read'}
@@ -103,5 +103,4 @@ const init = () => {
         renderBooks();
     }
 };
-
 init();
