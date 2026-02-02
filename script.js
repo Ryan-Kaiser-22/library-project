@@ -1,8 +1,10 @@
+//Create empty library and get elements from HTML
 let myLibrary = [];
 const bookForm = document.querySelector('.book-form');
 const cardContainer = document.getElementById('card-container');
 const searchBar = document.getElementById('book-search');
 
+//The Book constructor
 function Book(title, author, pages, isRead) {
     this.id = crypto.randomUUID(); 
     this.title = capitalize(title);
@@ -11,10 +13,12 @@ function Book(title, author, pages, isRead) {
     this.isRead = isRead;
 }
 
+//Using prototype for toggle function
 Book.prototype.toggleRead = function() {
     this.isRead = !this.isRead;
 };
 
+//Function for adding books to the library array
 function addBookToLibrary(title, author, pages, isRead) {
     const newBook = new Book(title, author, pages, isRead);
     myLibrary.push(newBook);
@@ -22,16 +26,19 @@ function addBookToLibrary(title, author, pages, isRead) {
     renderBooks();
 }
 
+//Force input to capitalize book and author names
 const capitalize = (str) => {
     return str.toLowerCase().split(' ').map(word => 
         word.charAt(0).toUpperCase() + word.slice(1)
     ).join(' ');
 };
 
+// Using Stringify for localStorage
 const saveLocalStorage = () => {
     localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
 };
 
+//Render book cards 
 const renderBooks = (dataToRender = myLibrary) => {
     cardContainer.innerHTML = "";
 
@@ -57,6 +64,7 @@ const renderBooks = (dataToRender = myLibrary) => {
     });
 };
 
+//Toggle read/not read using book's id
 const handleToggle = (id) => {
     const book = myLibrary.find(b => b.id === id);
     if (book) {
@@ -66,6 +74,7 @@ const handleToggle = (id) => {
     }
 };
 
+//Delete book from library and render change
 const handleDelete = (id) => {
     const book = myLibrary.find(b => b.id === id);
     if (confirm(`Delete "${book.title}"?`)) {
@@ -75,6 +84,7 @@ const handleDelete = (id) => {
     }
 };
 
+//Event listeners
 bookForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -96,6 +106,7 @@ searchBar.addEventListener('input', (e) => {
     renderBooks(filteredBooks);
 });
 
+//Init localStorage for library
 const init = () => {
     const savedData = localStorage.getItem('myLibrary');
     if (savedData) {
@@ -103,4 +114,5 @@ const init = () => {
         renderBooks();
     }
 };
+
 init();
