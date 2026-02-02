@@ -14,7 +14,7 @@ body {
     "sidebar main ";
   min-height: 100vh;
   margin: 0;
-  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -182,7 +182,7 @@ button {
   border-radius: 12px 0 0 12px;
   outline: none;
   background-color: #ffffff;
-  font-family: "Roboto", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 20px;
 }
 
@@ -311,7 +311,7 @@ button {
 }
 
 .toggle-btn {
-  font-family: "Roboto", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: #515664d2;
   border-radius: 12px;
   border: 2px solid #515664d2;
